@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="stylesheet" href="assets/css/cursor.css">
-<link rel="stylesheet" href="assets/css/loader.css">
+    <link rel="stylesheet" href="<?php echo asset_url('assets/css/login.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset_url('assets/css/cursor.css'); ?>">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/loader.css'); ?>">
 </head>
 <body>
     <div class="orb orb-1"></div>
@@ -185,6 +185,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.addEventListener('mouseleave', () => { card.style.transform = 'rotateY(0) rotateX(0)'; });
         })();
     </script>
-<script src="assets/js/loader.js"></script>
+<script src="<?php echo asset_url('assets/js/loader.js'); ?>"></script>
 </body>
 </html>

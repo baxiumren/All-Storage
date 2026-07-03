@@ -75,9 +75,9 @@ function h_ago($ts) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="assets/css/app.css">
-<link rel="stylesheet" href="assets/css/cursor.css">
-<link rel="stylesheet" href="assets/css/loader.css">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/app.css'); ?>">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/cursor.css'); ?>">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/loader.css'); ?>">
 </head>
 <body>
 <div class="bg-orb orb-1"></div><div class="bg-orb orb-2"></div><div class="bg-orb orb-3"></div>
@@ -234,6 +234,6 @@ if(localStorage.getItem('storageTheme')==='light'){
     const ic=document.querySelector('#btnTheme i'); if(ic) ic.className='fas fa-moon';
 }
 </script>
-<script src="assets/js/loader.js"></script>
+<script src="<?php echo asset_url('assets/js/loader.js'); ?>"></script>
 </body>
 </html>

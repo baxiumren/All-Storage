@@ -46,6 +46,18 @@ define('MAX_LOGIN_ATTEMPTS', 5);
 define('LOCKOUT_DURATION', 900); // 15 menit
 
 // ============================================================
+// ASSET VERSIONING (anti cache basi)
+// CSS/JS dikasih ?v=<waktu modifikasi file> — tiap deploy versi berubah,
+// browser otomatis download yang baru. Gak ada lagi tampilan rusak
+// gara-gara cache nyangkut.
+// ============================================================
+function asset_url($path) {
+    $f = __DIR__ . '/' . $path;
+    $v = file_exists($f) ? filemtime($f) : 1;
+    return htmlspecialchars($path) . '?v=' . $v;
+}
+
+// ============================================================
 // SESSION HARDENING
 // Cookie session: HttpOnly (JS gak bisa baca), SameSite=Lax
 // (tahan CSRF dasar), Secure otomatis kalau lewat HTTPS.

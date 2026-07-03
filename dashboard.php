@@ -115,9 +115,9 @@ $trash_count = file_exists($trash_meta_file) ? count(json_decode(file_get_conten
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="assets/css/app.css">
-<link rel="stylesheet" href="assets/css/cursor.css">
-<link rel="stylesheet" href="assets/css/loader.css">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/app.css'); ?>">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/cursor.css'); ?>">
+<link rel="stylesheet" href="<?php echo asset_url('assets/css/loader.css'); ?>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
@@ -804,7 +804,7 @@ const MAX_FILE_SIZE = <?php echo MAX_FILE_SIZE; ?>;
 const ALLOWED_EXTS  = <?php echo json_encode(ALLOWED_EXTENSIONS); ?>;
 let ITEMS_PER_PAGE  = 20;
 </script>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/loader.js"></script>
+<script src="<?php echo asset_url('assets/js/app.js'); ?>"></script>
+<script src="<?php echo asset_url('assets/js/loader.js'); ?>"></script>
 </body>
 </html>
