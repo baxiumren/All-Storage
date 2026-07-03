@@ -1,2 +1,5 @@
 # Folder data (log, session attempts, share links) tidak boleh diakses dari web
 Require all denied
+
+# Template 403 bertema (LiteSpeed butuh ErrorDocument di sini, gak ngoper dari parent)
+ErrorDocument 403 /403.php

@@ -1,3 +1,6 @@
 # Folder raws/ TIDAK boleh diakses langsung dari web sama sekali —
 # isi txt cuma keluar lewat pintu resmi /raw/{id} (raw.php)
 Require all denied
+
+# Template 403 bertema (LiteSpeed butuh ErrorDocument di sini, gak ngoper dari parent)
+ErrorDocument 403 /403.php

@@ -77,10 +77,10 @@ RedirectMatch 404 /\.git
 
 # ============================================================
 # ERROR PAGES
-# 403 (folder dibuka langsung / file terlarang) DISAMARKAN jadi 404
-# supaya orang gak bisa nebak folder mana yang ada isinya.
-# 404.php mengirim status 404 asli, jadi dari luar semua seragam.
+# 403 = area terkunci (raws/, data/, config) → template gembok 403.php
+# 404 = tidak ditemukan. Folder biasa tetap dijawab 404 via rewrite.
+
 # ============================================================
-ErrorDocument 403 /404.php
+ErrorDocument 403 /403.php
 ErrorDocument 404 /404.php
 ErrorDocument 503 /503.php
