@@ -41,6 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initKeyboard();
     initPasteUpload();
     initRowOpen();
+    // Deep-link dari Home: dashboard.php#trash → langsung buka modalnya
+    const HASH_MODALS={
+        '#search':  ()=>showGlobalSearch(),
+        '#trash':   ()=>showTrashModal(),
+        '#stats':   ()=>showStatsModal(),
+        '#log':     ()=>showLogModal(),
+        '#changepw':()=>showChangePwModal(),
+    };
+    if(HASH_MODALS[location.hash]){
+        HASH_MODALS[location.hash]();
+        history.replaceState(null,'',location.pathname+location.search);
+    }
 });
 
 // ══ KLIK BARIS/KARTU = LANGSUNG BUKA ══

@@ -52,6 +52,10 @@ if (file_exists(LINKS_FILE)) {
     $rw_links = count(json_decode(file_get_contents(LINKS_FILE), true) ?? []);
 }
 
+// Trash count (buat badge di menu utama)
+$trash_meta_file = DATA_DIR . '/trash_meta.json';
+$trash_count = file_exists($trash_meta_file) ? count(json_decode(file_get_contents($trash_meta_file), true) ?? []) : 0;
+
 function h_ago($ts) {
     $d = time() - $ts;
     if ($d < 60)    return 'baru saja';
@@ -81,7 +85,7 @@ function h_ago($ts) {
 <div class="layout">
 
 <!-- ══ NAVBAR ══ -->
-<nav class="navbar">
+<nav class="navbar navbar-home">
     <div class="nav-logo">
         <div class="nav-logo-icon"><i class="fas fa-vault"></i></div>
         <div><div class="nav-logo-text">MAHASTORAGE</div><div class="nav-logo-sub">Storage &amp; Raw Vault</div></div>
@@ -91,6 +95,14 @@ function h_ago($ts) {
             <div class="nav-username"><?php echo htmlspecialchars($_SESSION['username']);?></div>
             <div class="nav-ip"><?php echo htmlspecialchars($_SESSION['ip']);?></div>
         </div>
+        <a class="btn-icon" href="dashboard.php#search" title="Search All Folders"><i class="fas fa-search"></i></a>
+        <a class="btn-icon trash-btn" href="dashboard.php#trash" title="Recycle Bin">
+            <i class="fas fa-trash-alt"></i>
+            <?php if($trash_count > 0): ?><span class="trash-badge"><?php echo $trash_count; ?></span><?php endif; ?>
+        </a>
+        <a class="btn-icon" href="dashboard.php#stats" title="Storage Stats"><i class="fas fa-chart-bar"></i></a>
+        <a class="btn-icon" href="dashboard.php#log" title="Activity Log"><i class="fas fa-history"></i></a>
+        <a class="btn-icon" href="dashboard.php#changepw" title="Change Password"><i class="fas fa-key"></i></a>
         <button class="btn-icon" onclick="toggleTheme()" id="btnTheme" title="Toggle Light/Dark"><i class="fas fa-sun"></i></button>
         <a href="logout.php" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
