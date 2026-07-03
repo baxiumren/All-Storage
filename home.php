@@ -106,7 +106,39 @@ function h_ago($ts) {
         <button class="btn-icon" onclick="toggleTheme()" id="btnTheme" title="Toggle Light/Dark"><i class="fas fa-sun"></i></button>
         <a href="logout.php" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
+
+    <!-- Hamburger (mobile only) -->
+    <button class="btn-icon nav-burger" id="navBurger" onclick="toggleMobileMenu(event)" aria-label="Menu">
+        <span class="burger-lines"><span></span><span></span><span></span></span>
+        <?php if($trash_count > 0): ?><span class="trash-badge burger-badge"><?php echo $trash_count; ?></span><?php endif; ?>
+    </button>
 </nav>
+
+<!-- ══ MOBILE MENU DRAWER ══ -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mm-user">
+        <div class="mm-avatar"><i class="fas fa-user"></i></div>
+        <div>
+            <div class="mm-username"><?php echo htmlspecialchars($_SESSION['username']);?></div>
+            <div class="mm-ip"><?php echo htmlspecialchars($_SESSION['ip']);?></div>
+        </div>
+    </div>
+    <div class="mm-sep"></div>
+    <button class="mm-item" onclick="location.href='dashboard.php'"><i class="fas fa-photo-film"></i> Private Storage</button>
+    <button class="mm-item" onclick="location.href='texts.php'"><i class="fas fa-file-lines"></i> Raw Storage</button>
+    <div class="mm-sep"></div>
+    <button class="mm-item" onclick="location.href='dashboard.php#search'"><i class="fas fa-search"></i> Search All Folders</button>
+    <button class="mm-item" onclick="location.href='dashboard.php#trash'"><i class="fas fa-trash-alt"></i> Recycle Bin
+        <?php if($trash_count > 0): ?><span class="mm-badge"><?php echo $trash_count; ?></span><?php endif; ?>
+    </button>
+    <button class="mm-item" onclick="location.href='dashboard.php#stats'"><i class="fas fa-chart-bar"></i> Storage Stats</button>
+    <button class="mm-item" onclick="location.href='dashboard.php#log'"><i class="fas fa-history"></i> Activity Log</button>
+    <button class="mm-item" onclick="location.href='dashboard.php#changepw'"><i class="fas fa-key"></i> Change Password</button>
+    <div class="mm-sep"></div>
+    <button class="mm-item" onclick="closeMobileMenu();toggleTheme()"><i class="fas fa-adjust"></i> Light / Dark Mode</button>
+    <button class="mm-item mm-danger" onclick="location.href='logout.php'"><i class="fas fa-sign-out-alt"></i> Logout</button>
+</div>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="closeMobileMenu()"></div>
 
 <!-- ══ MAIN ══ -->
 <div class="main" style="max-width:980px;">
@@ -174,6 +206,23 @@ function h_ago($ts) {
 </div><!-- /layout -->
 
 <script>
+function toggleMobileMenu(e){
+    if(e) e.stopPropagation();
+    const menu=document.getElementById('mobileMenu');
+    const bd=document.getElementById('mobileMenuBackdrop');
+    const burger=document.getElementById('navBurger');
+    const open=menu.classList.toggle('open');
+    bd.classList.toggle('open',open);
+    burger.classList.toggle('open',open);
+    document.body.style.overflow=open?'hidden':'';
+}
+function closeMobileMenu(){
+    document.getElementById('mobileMenu')?.classList.remove('open');
+    document.getElementById('mobileMenuBackdrop')?.classList.remove('open');
+    document.getElementById('navBurger')?.classList.remove('open');
+    document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu();});
 function toggleTheme(){
     const isLight = document.body.classList.toggle('light');
     const ic = document.querySelector('#btnTheme i');

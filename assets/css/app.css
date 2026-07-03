@@ -884,12 +884,7 @@ body.light .home-card:hover{box-shadow:0 22px 46px -18px rgba(10,30,100,.3);}
 body.light .raw-link-chip{background:#fdf9ec;}
 @media(max-width:1280px){.nav-stats{display:none;}}
 
-/* Home tidak punya hamburger — di mobile menu utamanya tetap tampil sebagai baris geser */
+/* Home: navbar mobile = logo + hamburger, sama seperti halaman lain */
 @media(max-width:768px){
-    .navbar-home{flex-wrap:wrap;height:auto!important;padding:10px 12px;}
-    .navbar-home .nav-actions{display:flex;width:100%;flex-wrap:nowrap;gap:6px;
-        overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
-    .navbar-home .nav-actions::-webkit-scrollbar{display:none;}
-    .navbar-home .nav-actions>div:first-child{margin-right:auto;text-align:left!important;flex-shrink:0;}
-    .navbar-home .btn-logout{flex-shrink:0;}
+    .navbar-home{padding:0 12px;height:60px;}
 }
