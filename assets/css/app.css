@@ -99,13 +99,14 @@ input[type=search]::-webkit-search-decoration{-webkit-appearance:none;display:no
     display:flex;align-items:center;justify-content:center;font-size:18px;
     box-shadow:0 8px 20px -6px rgba(5,60,240,.8),inset 0 1px 0 rgba(255,255,255,.3);}
 .nav-logo-icon i{color:#fff;font-size:17px;filter:drop-shadow(0 2px 5px rgba(0,0,0,.45));}
-.nav-logo-icon::after{content:'';position:absolute;inset:-3px;border-radius:16px;padding:1.5px;
-    background:conic-gradient(from var(--ring,0deg),transparent 0 72%,var(--gold) 86%,transparent 100%);
+/* Cincin emas berputar — pakai transform rotate (GPU), bukan animasi
+   sudut gradient: teknik lama suka beku di navbar sticky+blur di sebagian GPU */
+.nav-logo-icon::after{content:'';position:absolute;inset:-5px;border-radius:50%;padding:2px;
+    background:conic-gradient(from 0deg,transparent 0 72%,var(--gold) 86%,transparent 100%);
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
     -webkit-mask-composite:xor;mask-composite:exclude;
-    animation:ringSpin 5s linear infinite;}
-@property --ring{syntax:'<angle>';initial-value:0deg;inherits:false;}
-@keyframes ringSpin{to{--ring:360deg;}}
+    animation:ringSpin 5s linear infinite;will-change:transform;}
+@keyframes ringSpin{to{transform:rotate(360deg);}}
 .nav-logo-text{font-family:'Fraunces',serif;font-size:16.5px;font-weight:600;letter-spacing:.2px;
     background:linear-gradient(90deg,#fff 30%,var(--gold) 65%,#fff 100%);
     background-size:220% 100%;
