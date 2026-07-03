@@ -111,12 +111,12 @@ $total_size = array_sum(array_column($txt_files, 'size'));
             <div id="createMessage" class="msg-box"></div>
             <div class="field-row">
                 <div class="field">
-                    <label class="field-label">Nama file</label>
-                    <input type="text" id="newTxtName" class="field-input" placeholder="config-promo" autocomplete="off">
+                    <label class="field-label">Nama file <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);">(opsional)</span></label>
+                    <input type="text" id="newTxtName" class="field-input" placeholder="kosongkan = nama otomatis" autocomplete="off" onkeydown="if(event.key==='Enter')createTxt()">
                 </div>
                 <button onclick="createTxt()" class="btn btn-primary"><i class="fas fa-plus"></i> Create</button>
             </div>
-            <p style="font-size:11px;color:var(--text-muted);margin-top:9px;"><i class="fas fa-info-circle"></i> Otomatis jadi <code style="color:var(--gold);">.txt</code> dan langsung kebuka di editor</p>
+            <p style="font-size:11px;color:var(--text-muted);margin-top:9px;"><i class="fas fa-info-circle"></i> Kosongkan nama → otomatis <code style="color:var(--gold);">txt-a7k2q9.txt</code> · langsung kebuka di editor</p>
         </div>
 
         <div class="glass-card panel">

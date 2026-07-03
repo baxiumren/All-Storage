@@ -78,9 +78,15 @@ function closeMobileMenu(){
 }
 
 // ══ CREATE TXT ══
+function genTxtName(){
+    // nama otomatis: txt-xxxxxx (huruf+angka acak, gaya raw id)
+    const c='abcdefghjkmnpqrstuvwxyz23456789';
+    let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];
+    return 'txt-'+s;
+}
 function createTxt(){
-    const name=document.getElementById('newTxtName').value.trim();
-    if(!name){showMsg('createMessage','Nama file tidak boleh kosong','error');return;}
+    let name=document.getElementById('newTxtName').value.trim();
+    if(!name){name=genTxtName();showToast('Nama otomatis: '+name+'.txt','info');}
     if(!/^[a-zA-Z0-9._-]+$/.test(name)){showMsg('createMessage','Hanya huruf, angka, titik, _ dan -','error');return;}
     api({action:'create',name}).then(r=>{
         if(r.success){

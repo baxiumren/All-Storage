@@ -49,7 +49,13 @@ $action = $_POST['action'] ?? '';
 switch ($action) {
 
     case 'create': {
-        $name = txt_safe_name($_POST['name'] ?? '');
+        $raw_name = trim((string)($_POST['name'] ?? ''));
+        // nama kosong → generate otomatis (txt-xxxxxx), dijamin belum kepakai
+        if ($raw_name === '') {
+            do { $raw_name = 'txt-' . substr(bin2hex(random_bytes(4)), 0, 6); }
+            while (file_exists(RAWS_DIR . '/' . $raw_name . '.txt'));
+        }
+        $name = txt_safe_name($raw_name);
         if ($name === false) { echo json_encode(['success' => false, 'message' => 'Nama tidak valid']); exit; }
         $path = txt_path($name);
         if (file_exists($path)) { echo json_encode(['success' => false, 'message' => 'File sudah ada']); exit; }
