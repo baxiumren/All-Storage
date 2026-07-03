@@ -161,15 +161,7 @@ $trash_count = file_exists($trash_meta_file) ? count(json_decode(file_get_conten
             <div class="nav-username"><?php echo htmlspecialchars($_SESSION['username']);?></div>
             <div class="nav-ip"><?php echo htmlspecialchars($_SESSION['ip']);?></div>
         </div>
-        <button class="btn-icon" onclick="showGlobalSearch()" title="Search All Folders (Ctrl+F)"><i class="fas fa-search"></i></button>
-        <button class="btn-icon" onclick="extendSession()" title="Extend Session"><i class="fas fa-clock"></i></button>
-        <button class="btn-icon trash-btn" onclick="showTrashModal()" title="Recycle Bin">
-            <i class="fas fa-trash-alt"></i>
-            <?php if($trash_count > 0): ?><span class="trash-badge"><?php echo $trash_count; ?></span><?php endif; ?>
-        </button>
-        <button class="btn-icon" onclick="showStatsModal()" title="Storage Stats"><i class="fas fa-chart-bar"></i></button>
-        <button class="btn-icon" onclick="showLogModal()" title="Activity Log"><i class="fas fa-history"></i></button>
-        <button class="btn-icon" onclick="showChangePwModal()" title="Change Password"><i class="fas fa-key"></i></button>
+        <!-- Menu utama (search/trash/stats/log/password) sekarang di Home -->
         <button class="btn-icon" onclick="toggleTheme()" id="btnTheme" title="Toggle Light/Dark"><i class="fas fa-sun"></i></button>
         <a href="#" class="btn-logout" onclick="customConfirm('Sign out of MAHASTORAGE?',()=>location.href='logout.php','Sign Out',false,'fa-sign-out-alt');return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
@@ -199,7 +191,6 @@ $trash_count = file_exists($trash_meta_file) ? count(json_decode(file_get_conten
     <button class="mm-item" onclick="closeMobileMenu();showLogModal()"><i class="fas fa-history"></i> Activity Log</button>
     <div class="mm-sep"></div>
     <button class="mm-item" onclick="closeMobileMenu();showChangePwModal()"><i class="fas fa-key"></i> Change Password</button>
-    <button class="mm-item" onclick="closeMobileMenu();extendSession()"><i class="fas fa-clock"></i> Extend Session</button>
     <button class="mm-item" onclick="closeMobileMenu();toggleTheme()"><i class="fas fa-adjust"></i> Light / Dark Mode</button>
     <div class="mm-sep"></div>
     <button class="mm-item mm-danger" onclick="closeMobileMenu();customConfirm('Sign out of MAHASTORAGE?',()=>location.href='logout.php','Sign Out',false,'fa-sign-out-alt')"><i class="fas fa-sign-out-alt"></i> Logout</button>
