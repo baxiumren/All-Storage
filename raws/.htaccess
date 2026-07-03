@@ -1,0 +1,3 @@
+# Folder raws/ TIDAK boleh diakses langsung dari web sama sekali —
+# isi txt cuma keluar lewat pintu resmi /raw/{id} (raw.php)
+Require all denied
