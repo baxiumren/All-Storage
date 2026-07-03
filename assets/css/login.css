@@ -18,7 +18,7 @@
     --line:rgba(255,255,255,.08);
 }
 
-html,body{height:100%;}
+html{height:100%;}
 body{
     font-family:'Instrument Sans','Segoe UI',sans-serif;
     background:
@@ -26,8 +26,13 @@ body{
         radial-gradient(800px 600px at 108% 108%, rgba(5,95,240,.22), transparent 58%),
         radial-gradient(520px 520px at -6% 88%, rgba(255,215,0,.07), transparent 60%),
         var(--bg-dark);
-    min-height:100vh;display:flex;align-items:center;justify-content:center;
-    overflow:hidden;color:var(--text);
+    background-attachment:fixed;
+    /* svh = tinggi layar HP yang BENERAN kelihatan (100vh ikut ngitung URL bar
+       browser → halaman jadi bisa di-scroll ke ruang kosong) */
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;align-items:center;justify-content:center;
+    overflow-x:hidden;color:var(--text);
     -webkit-font-smoothing:antialiased;
     perspective:1200px;
 }
