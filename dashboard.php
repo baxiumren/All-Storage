@@ -117,6 +117,7 @@ $trash_count = file_exists($trash_meta_file) ? count(json_decode(file_get_conten
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="assets/css/app.css">
 <link rel="stylesheet" href="assets/css/cursor.css">
+<link rel="stylesheet" href="assets/css/loader.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
@@ -813,5 +814,6 @@ const ALLOWED_EXTS  = <?php echo json_encode(ALLOWED_EXTENSIONS); ?>;
 let ITEMS_PER_PAGE  = 20;
 </script>
 <script src="assets/js/app.js"></script>
+<script src="assets/js/loader.js"></script>
 </body>
 </html>

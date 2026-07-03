@@ -1,0 +1,49 @@
+/* ═══════════════════════════════════════════════════════════
+   MAHASTORAGE — Loader (triple ring, gold + blue)
+   ═══════════════════════════════════════════════════════════ */
+.loader{
+    width:50px;
+    aspect-ratio:1;
+    border-radius:50%;
+    border:8px solid #0000;
+    border-right-color:#FFD700;          /* ring dalam: emas */
+    position:relative;
+    animation:l24 1s infinite linear;
+}
+.loader:before,
+.loader:after{
+    content:"";
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    border:inherit;
+    animation:inherit;
+    animation-duration:2s;
+}
+.loader:before{border-right-color:#2f7bff;}             /* ring tengah: biru terang */
+.loader:after{border-right-color:rgba(5,95,240,.55);animation-duration:4s;} /* ring luar: biru redup */
+@keyframes l24{100%{transform:rotate(1turn)}}
+
+/* ── Overlay full-screen saat pindah halaman ── */
+.page-loader{
+    position:fixed;inset:0;z-index:99990;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    background:rgba(2,7,24,.88);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    opacity:0;pointer-events:none;
+    transition:opacity .25s ease;
+}
+.page-loader.show{opacity:1;pointer-events:auto;}
+.page-loader .pl-text{
+    font-family:'Instrument Sans','Segoe UI',sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
+    color:#FFD700;
+    animation:plPulse 1.6s ease-in-out infinite;
+}
+@keyframes plPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+body.light .page-loader{background:rgba(238,243,253,.9);}
+body.light .page-loader .pl-text{color:#b8860b;}
+
+@media (prefers-reduced-motion:reduce){
+    .loader,.loader:before,.loader:after,.page-loader .pl-text{animation:none!important;}
+}

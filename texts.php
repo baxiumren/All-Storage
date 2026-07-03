@@ -45,6 +45,7 @@ $total_size = array_sum(array_column($txt_files, 'size'));
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="assets/css/app.css">
 <link rel="stylesheet" href="assets/css/cursor.css">
+<link rel="stylesheet" href="assets/css/loader.css">
 </head>
 <body>
 <div class="bg-orb orb-1"></div><div class="bg-orb orb-2"></div><div class="bg-orb orb-3"></div>
@@ -198,7 +199,7 @@ $total_size = array_sum(array_column($txt_files, 'size'));
                         <?php if ($is_txt): ?>
                         <button onclick="downloadTxt('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-ghost btn-sm" title="Download"><i class="fas fa-download"></i></button>
                         <?php elseif ($id): ?>
-                        <a href="raw.php?id=<?php echo htmlspecialchars($id);?>" class="btn btn-ghost btn-sm" title="Download ZIP"><i class="fas fa-download"></i></a>
+                        <a href="raw.php?id=<?php echo htmlspecialchars($id);?>" download class="btn btn-ghost btn-sm" title="Download ZIP"><i class="fas fa-download"></i></a>
                         <?php endif; ?>
                         <button onclick="deleteTxt('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-danger btn-sm" title="Hapus"><i class="fas fa-trash"></i></button>
                     </div>
@@ -283,5 +284,6 @@ const CSRF_TOKEN = '<?php echo $csrf_token; ?>';
 const BASE_URL   = (()=>{ const p=window.location.pathname.split('/'); p.pop(); return window.location.origin+p.join('/'); })();
 </script>
 <script src="assets/js/texts.js"></script>
+<script src="assets/js/loader.js"></script>
 </body>
 </html>
