@@ -1,6 +1,7 @@
 <?php
 // MAHASTORAGE — Raw link publik (/raw/{id})
-// txt : default = halaman viewer · ?plain=1 = text/plain polos (buat di-fetch)
+// txt : DEFAULT = text/plain polos (langsung bisa di-fetch codingan)
+//       ?view=1 = halaman viewer (copy content/url)
 // zip : langsung download
 require_once 'config.private.php';
 
@@ -32,8 +33,8 @@ if ($ext === 'zip') {
     exit;
 }
 
-// ── TXT plain: buat di-fetch dari codingan ──
-if (isset($_GET['plain'])) {
+// ── TXT DEFAULT: plain text polos, siap di-fetch dari mana pun ──
+if (!isset($_GET['view'])) {
     header('Content-Type: text/plain; charset=utf-8');
     header('X-Content-Type-Options: nosniff');
     header('Access-Control-Allow-Origin: *');
@@ -42,7 +43,7 @@ if (isset($_GET['plain'])) {
     exit;
 }
 
-// ── TXT default: halaman viewer ──
+// ── TXT ?view=1: halaman viewer ──
 $content   = htmlspecialchars(file_get_contents($real));
 $size      = filesize($real);
 $u = ['B','KB','MB','GB']; $i = 0; $s = $size;
@@ -53,8 +54,8 @@ $proto     = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https
 $req_path  = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
 $base_path = preg_replace('~/(raw/[a-z0-9]+/?|raw\.php)$~', '', $req_path);
 $base      = $proto . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . rtrim($base_path, '/');
-$view_url  = $base . '/raw/' . $id;
-$plain_url = $view_url . '?plain=1';
+$plain_url = $base . '/raw/' . $id;      // default = plain
+$view_url  = $plain_url;                 // yang disalin tombol Copy URL
 ?>
 <!DOCTYPE html>
 <html lang="id">
