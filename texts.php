@@ -13,14 +13,15 @@ function t_format_size($b) {
     return round($b, 2) . ' ' . $u[$i];
 }
 
-// Daftar file txt di raws/
+// Daftar file txt + zip di raws/
 $txt_files = [];
 foreach (scandir(RAWS_DIR) as $f) {
     if ($f[0] === '.') continue;
     $p = RAWS_DIR . '/' . $f;
     if (!is_file($p)) continue;
-    if (strtolower(pathinfo($f, PATHINFO_EXTENSION)) !== 'txt') continue;
-    $txt_files[] = ['name' => $f, 'size' => filesize($p), 'mtime' => filemtime($p)];
+    $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+    if (!in_array($ext, ['txt', 'zip'], true)) continue;
+    $txt_files[] = ['name' => $f, 'ext' => $ext, 'size' => filesize($p), 'mtime' => filemtime($p)];
 }
 usort($txt_files, fn($a,$b) => $b['mtime'] - $a['mtime']);
 
@@ -120,13 +121,13 @@ $total_size = array_sum(array_column($txt_files, 'size'));
         </div>
 
         <div class="glass-card panel">
-            <div class="panel-heading"><i class="fas fa-cloud-upload-alt"></i> Upload Text Files</div>
+            <div class="panel-heading"><i class="fas fa-cloud-upload-alt"></i> Upload TXT / ZIP</div>
             <div id="uploadMessage" class="msg-box"></div>
             <div id="txtDropArea" class="drop-zone">
                 <div class="drop-icon"><i class="fas fa-file-arrow-up"></i></div>
-                <div class="drop-title">Drop file .txt di sini</div>
-                <div class="drop-sub">atau <span style="color:var(--maroon-bright);cursor:pointer;" onclick="document.getElementById('txt_upload').click()">klik untuk pilih</span></div>
-                <input type="file" id="txt_upload" multiple accept=".txt" style="display:none;">
+                <div class="drop-title">Drop file .txt atau .zip di sini</div>
+                <div class="drop-sub">atau <span style="color:var(--maroon-bright);cursor:pointer;" onclick="document.getElementById('txt_upload').click()">klik untuk pilih</span> · txt max 5MB · zip max 100MB</div>
+                <input type="file" id="txt_upload" multiple accept=".txt,.zip" style="display:none;">
             </div>
         </div>
     </div>
@@ -161,13 +162,15 @@ $total_size = array_sum(array_column($txt_files, 'size'));
             </thead>
             <tbody>
             <?php foreach ($txt_files as $tf):
-                $id = $by_name[$tf['name']] ?? '';
+                $id     = $by_name[$tf['name']] ?? '';
+                $is_txt = $tf['ext'] === 'txt';
             ?>
             <tr data-name="<?php echo htmlspecialchars($tf['name']);?>">
                 <td>
                     <div class="name-cell">
-                        <span class="file-emoji">📝</span>
+                        <span class="file-emoji"><?php echo $is_txt ? '📝' : '📦';?></span>
                         <span class="fname"><?php echo htmlspecialchars($tf['name']);?></span>
+                        <span class="ext-badge"><?php echo strtoupper($tf['ext']);?></span>
                     </div>
                 </td>
                 <td>
@@ -188,9 +191,15 @@ $total_size = array_sum(array_column($txt_files, 'size'));
                         <?php else: ?>
                         <button onclick="createRawLink('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-gold btn-sm" title="Buat raw link"><i class="fas fa-bolt"></i></button>
                         <?php endif; ?>
+                        <?php if ($is_txt): ?>
                         <button onclick="openTxtEditor('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-info btn-sm" title="Edit"><i class="fas fa-edit"></i></button>
+                        <?php endif; ?>
                         <button onclick="showRenameTxt('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-ghost btn-sm" title="Rename"><i class="fas fa-font"></i></button>
+                        <?php if ($is_txt): ?>
                         <button onclick="downloadTxt('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-ghost btn-sm" title="Download"><i class="fas fa-download"></i></button>
+                        <?php elseif ($id): ?>
+                        <a href="raw.php?id=<?php echo htmlspecialchars($id);?>" class="btn btn-ghost btn-sm" title="Download ZIP"><i class="fas fa-download"></i></a>
+                        <?php endif; ?>
                         <button onclick="deleteTxt('<?php echo htmlspecialchars($tf['name']);?>')" class="btn btn-danger btn-sm" title="Hapus"><i class="fas fa-trash"></i></button>
                     </div>
                 </td>

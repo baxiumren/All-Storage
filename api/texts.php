@@ -14,15 +14,18 @@ if (!csrf_verify($_POST['csrf_token'] ?? '')) {
 if (!file_exists(RAWS_DIR)) mkdir(RAWS_DIR, 0755, true);
 
 // ── Helpers ──
-function txt_safe_name($name) {
+// $force_ext: 'txt'/'zip' = paksa ekstensi itu · null = terima txt ATAU zip apa adanya
+function raw_safe_name($name, $force_ext = null) {
     $name = basename((string)$name);
     if (!preg_match('/^[a-zA-Z0-9._-]+$/', $name) || $name === '.' || $name === '..') return false;
-    // paksa ekstensi .txt
-    if (strtolower(pathinfo($name, PATHINFO_EXTENSION)) !== 'txt') {
-        $name = pathinfo($name, PATHINFO_FILENAME) . '.txt';
+    $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+    if ($force_ext !== null) {
+        if ($ext !== $force_ext) $name = pathinfo($name, PATHINFO_FILENAME) . '.' . $force_ext;
+        return $name;
     }
-    return $name;
+    return in_array($ext, ['txt', 'zip'], true) ? $name : false;
 }
+function txt_safe_name($name) { return raw_safe_name($name, 'txt'); }
 function txt_path($name) {
     $p    = RAWS_DIR . '/' . $name;
     $real = realpath(dirname($p));
@@ -103,10 +106,38 @@ switch ($action) {
         break;
     }
 
+    case 'upload_zip': {
+        if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+            echo json_encode(['success' => false, 'message' => 'Upload gagal']); exit;
+        }
+        if ($_FILES['file']['size'] > MAX_FILE_SIZE) {
+            $mb = MAX_FILE_SIZE / 1024 / 1024;
+            echo json_encode(['success' => false, 'message' => "File terlalu besar (max {$mb}MB)"]); exit;
+        }
+        // validasi zip beneran, bukan file lain yang di-rename
+        if (class_exists('ZipArchive')) {
+            $za = new ZipArchive();
+            if ($za->open($_FILES['file']['tmp_name']) !== true) {
+                echo json_encode(['success' => false, 'message' => 'File ZIP tidak valid']); exit;
+            }
+            $za->close();
+        }
+        $name = raw_safe_name(preg_replace('/[^a-zA-Z0-9._-]/', '_', $_FILES['file']['name']), 'zip');
+        if ($name === false) { echo json_encode(['success' => false, 'message' => 'Nama tidak valid']); exit; }
+        $base = pathinfo($name, PATHINFO_FILENAME); $i = 1;
+        while (file_exists(txt_path($name))) { $name = $base . '_' . $i . '.zip'; $i++; }
+        move_uploaded_file($_FILES['file']['tmp_name'], txt_path($name));
+        log_activity('RAW_UPLOAD_ZIP', $_SESSION['username'], $name);
+        echo json_encode(['success' => true, 'name' => $name]);
+        break;
+    }
+
     case 'rename': {
-        $old = txt_safe_name($_POST['name'] ?? '');
-        $new = txt_safe_name($_POST['new_name'] ?? '');
-        if ($old === false || $new === false) { echo json_encode(['success' => false, 'message' => 'Nama tidak valid']); exit; }
+        $old = raw_safe_name($_POST['name'] ?? '');
+        if ($old === false) { echo json_encode(['success' => false, 'message' => 'Nama tidak valid']); exit; }
+        // nama baru dipaksa ikut ekstensi file lama (txt tetap txt, zip tetap zip)
+        $new = raw_safe_name($_POST['new_name'] ?? '', strtolower(pathinfo($old, PATHINFO_EXTENSION)));
+        if ($new === false) { echo json_encode(['success' => false, 'message' => 'Nama tidak valid']); exit; }
         $op = txt_path($old); $np = txt_path($new);
         if (!is_file($op)) { echo json_encode(['success' => false, 'message' => 'File tidak ditemukan']); exit; }
         if (file_exists($np)) { echo json_encode(['success' => false, 'message' => 'Nama sudah dipakai']); exit; }
@@ -121,7 +152,7 @@ switch ($action) {
     }
 
     case 'delete': {
-        $name = txt_safe_name($_POST['name'] ?? '');
+        $name = raw_safe_name($_POST['name'] ?? '');
         $path = $name !== false ? txt_path($name) : false;
         if ($path === false || !is_file($path)) { echo json_encode(['success' => false, 'message' => 'File tidak ditemukan']); exit; }
         unlink($path);
@@ -135,7 +166,7 @@ switch ($action) {
     }
 
     case 'link_create': {
-        $name = txt_safe_name($_POST['name'] ?? '');
+        $name = raw_safe_name($_POST['name'] ?? '');
         $path = $name !== false ? txt_path($name) : false;
         if ($path === false || !is_file($path)) { echo json_encode(['success' => false, 'message' => 'File tidak ditemukan']); exit; }
         $existing = links_id_for($name);
@@ -150,7 +181,7 @@ switch ($action) {
     }
 
     case 'link_delete': {
-        $name = txt_safe_name($_POST['name'] ?? '');
+        $name = raw_safe_name($_POST['name'] ?? '');
         if ($name === false) { echo json_encode(['success' => false, 'message' => 'Nama tidak valid']); exit; }
         $links = links_load(); $changed = false;
         foreach ($links as $id => $f) if ($f === $name) { unset($links[$id]); $changed = true; }

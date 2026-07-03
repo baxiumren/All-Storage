@@ -113,21 +113,27 @@ txtDrop.addEventListener('click', ()=>txtInput.click());
 txtInput.addEventListener('change', e=>{if(e.target.files.length)uploadTxtFiles(e.target.files);});
 
 function uploadTxtFiles(files){
-    const list=[...files].filter(f=>f.name.toLowerCase().endsWith('.txt'));
-    const skipped=files.length-list.length;
-    if(skipped>0) showToast(skipped+' file ditolak (hanya .txt)','warn');
+    const MAX_TXT=5*1024*1024, MAX_ZIP=100*1024*1024;
+    const list=[],rejected=[];
+    [...files].forEach(f=>{
+        const n=f.name.toLowerCase();
+        if(n.endsWith('.txt')){ f.size>MAX_TXT ? rejected.push(f.name+' (txt max 5MB)') : list.push({f,action:'upload'}); }
+        else if(n.endsWith('.zip')){ f.size>MAX_ZIP ? rejected.push(f.name+' (zip max 100MB)') : list.push({f,action:'upload_zip'}); }
+        else rejected.push(f.name+' (hanya .txt / .zip)');
+    });
+    if(rejected.length) showToast(rejected.length+' ditolak: '+rejected[0],'warn');
     if(!list.length) return;
     let done=0,failed=0;
     function next(i){
         if(i>=list.length){
-            showToast(`${done}/${list.length} txt terupload`+(failed?`, ${failed} gagal`:''),failed?'warn':'success');
+            showToast(`${done}/${list.length} file terupload`+(failed?`, ${failed} gagal`:''),failed?'warn':'success');
             setTimeout(()=>location.reload(),1100);
             return;
         }
         const fd=new FormData();
-        fd.append('action','upload');
+        fd.append('action',list[i].action);
         fd.append('csrf_token',CSRF_TOKEN);
-        fd.append('file',list[i]);
+        fd.append('file',list[i].f);
         fetch('api/texts.php',{method:'POST',body:fd}).then(r=>r.json())
             .then(r=>{r.success?done++:failed++;next(i+1);})
             .catch(()=>{failed++;next(i+1);});
@@ -186,7 +192,7 @@ function saveTxtEdit(){
 let renamingTxt='';
 function showRenameTxt(name){
     renamingTxt=name;
-    document.getElementById('txtRenameInput').value=name.replace(/\.txt$/i,'');
+    document.getElementById('txtRenameInput').value=name.replace(/\.(txt|zip)$/i,'');
     document.getElementById('txtRenameMsg').style.display='none';
     openModal('txtRenameModal');
     setTimeout(()=>document.getElementById('txtRenameInput').focus(),120);
